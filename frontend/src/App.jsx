@@ -4,7 +4,7 @@ import PayoutForm from "./components/PayoutForm";
 import LedgerTable from "./components/LedgerTable";
 import PayoutHistory from "./components/PayoutHistory";
 
-const API = import.meta.env.VITE_API_URL || "http://localhost:8000/api/v1";
+const API =   `${import.meta.env.VITE_API_BASE}/api/v1`;
 
 export default function App() {
   const [merchants, setMerchants] = useState([]);

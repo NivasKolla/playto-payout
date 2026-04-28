@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+from corsheaders.defaults import default_headers
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -91,7 +92,11 @@ CELERY_BEAT_SCHEDULE = {
 }
 
 # ── CORS ────────────────────────────────────────────────────────────────────
-CORS_ALLOW_ALL_ORIGINS = True  # restrict in production
+CORS_ALLOW_ALL_ORIGINS = True 
+CORS_ALLOW_HEADERS = list(default_headers) + [
+
+  "idempotency-key",
+] 
 
 # ── Static files ─────────────────────────────────────────────────────────────
 STATIC_URL = "/static/"

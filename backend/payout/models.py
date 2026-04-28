@@ -21,8 +21,8 @@ class Merchant(models.Model):
         result = self.ledger_entries.aggregate(
             balance=Sum(
                 Case(
-                    When(entry_type=LedgerEntry.CREDIT, then=F("amount_paise")),
-                    When(entry_type=LedgerEntry.DEBIT, then=-F("amount_paise")),
+                    When(entry_type="credit", then=F("amount_paise")),
+                    When(entry_type="debit", then=-F("amount_paise")),
                     output_field=BigIntegerField(),
                 )
             )

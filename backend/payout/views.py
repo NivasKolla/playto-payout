@@ -21,6 +21,9 @@ from django.db import transaction, IntegrityError
 from django.utils import timezone
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from .models import BankAccount
+from .serializers import BankAccountSerializer
+
 from rest_framework import status
 from django.http import HttpResponse
 
@@ -50,7 +53,7 @@ class MerchantDashboardView(APIView):
         except Merchant.DoesNotExist:
             return Response({"error": "Merchant not found"}, status=404)
 
-        ledger_entries = LedgerEntry.objects.filter(merchant=merchant).select_related("payout")[:30]
+        ledger_entries = LedgerEntry.objects.filter(merchant=merchant).select_related("merchant")[:30]
         payouts = PayoutRequest.objects.filter(merchant=merchant).select_related("bank_account")[:30]
         bank_accounts = BankAccount.objects.filter(merchant=merchant, is_active=True)
 
@@ -174,9 +177,8 @@ class CreatePayoutView(APIView):
                 LedgerEntry.objects.create(
                     merchant=merchant_locked,
                     amount_paise=amount_paise,
-                    entry_type=LedgerEntry.DEBIT,
-                    payout=payout,
-                    description=f"Payout #{payout.id} — funds held",
+                    entry_type="debit",
+                  
                 )
 
                 resp_body = PayoutRequestSerializer(payout).data
@@ -242,3 +244,8 @@ def create_admin(request):
         return HttpResponse("Admin created")
 
     return HttpResponse("Admin already exists")
+class BankAccountListView(APIView):
+    def get(self, request):
+        accounts = BankAccount.objects.all()
+        serializer = BankAccountSerializer(accounts, many=True)
+        return Response(serializer.data)

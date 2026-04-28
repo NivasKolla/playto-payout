@@ -16,7 +16,7 @@ class BankAccountSerializer(serializers.ModelSerializer):
 class LedgerEntrySerializer(serializers.ModelSerializer):
     class Meta:
         model = LedgerEntry
-        fields = ["id", "amount_paise", "entry_type", "description", "payout_id", "created_at"]
+        fields = ["id", "amount_paise", "entry_type",  "created_at"]
 
 
 class PayoutRequestSerializer(serializers.ModelSerializer):
@@ -48,10 +48,19 @@ class MerchantDashboardSerializer(serializers.ModelSerializer):
     balance_paise = serializers.SerializerMethodField()
     held_paise = serializers.SerializerMethodField()
     available_paise = serializers.SerializerMethodField()
+    bank_accounts = BankAccountSerializer(many=True, read_only=True)
 
     class Meta:
         model = Merchant
-        fields = ["id", "name", "email", "balance_paise", "held_paise", "available_paise"]
+        fields = [
+            "id",
+            "name",
+            "email",
+            "balance_paise",
+            "held_paise",
+            "available_paise",
+            "bank_accounts"
+        ]
 
     def get_balance_paise(self, obj):
         return obj.get_balance_paise()
