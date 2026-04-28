@@ -57,22 +57,21 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "playto.wsgi.application"
 
-# ── Database ────────────────────────────────────────────────────────────────
-DATABASE_URL = os.environ.get("DATABASE_URL", "")
-if DATABASE_URL:
-    import dj_database_url
-    DATABASES = {"default": dj_database_url.parse(DATABASE_URL, conn_max_age=600)}
-else:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": os.environ.get("DB_NAME", "playto"),
-            "USER": os.environ.get("DB_USER", "playto"),
-            "PASSWORD": os.environ.get("DB_PASSWORD", "playto"),
-            "HOST": os.environ.get("DB_HOST", "db"),
-            "PORT": os.environ.get("DB_PORT", "5432"),
-        }
-    }
+
+
+DATABASES = {
+ "default": {
+    "ENGINE": "django.db.backends.sqlite3",
+    "NAME": BASE_DIR / "db.sqlite3",
+  }
+}
+
+    
+    
+
+            
+        
+    
 
 # ── Celery ──────────────────────────────────────────────────────────────────
 REDIS_URL = os.environ.get("REDIS_URL", "redis://redis:6379/0")
@@ -128,11 +127,4 @@ LOGGING = {
     "loggers": {
         "payout": {"handlers": ["console"], "level": "DEBUG", "propagate": False},
     },
-}
-import dj_database_url
-
-DATABASES = {
-    "default": dj_database_url.config(
-        default=os.environ.get("DATABASE_URL")
-    )
 }

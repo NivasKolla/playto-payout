@@ -157,3 +157,20 @@ class IdempotencyKey(models.Model):
 
     def __str__(self):
         return f"IdempotencyKey {self.key} for {self.merchant}"
+    from django.db import models
+
+class LedgerEntry(models.Model):
+    ENTRY_TYPES = (
+        ('credit', 'Credit'),
+        ('debit', 'Debit'),
+        ('hold', 'Hold'),
+        ('release', 'Release'),
+    )
+
+    merchant = models.ForeignKey('Merchant', on_delete=models.CASCADE)
+    amount_paise = models.BigIntegerField()
+    entry_type = models.CharField(max_length=20, choices=ENTRY_TYPES)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.merchant.name} - {self.entry_type} - {self.amount_paise}"

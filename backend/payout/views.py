@@ -22,6 +22,7 @@ from django.utils import timezone
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from django.http import HttpResponse
 
 from .models import Merchant, BankAccount, LedgerEntry, PayoutRequest, IdempotencyKey
 from .serializers import (
@@ -222,3 +223,7 @@ class PayoutDetailView(APIView):
         except PayoutRequest.DoesNotExist:
             return Response({"error": "Payout not found"}, status=404)
         return Response(PayoutRequestSerializer(payout).data)
+    from django.http import HttpResponse
+
+def home(request):
+    return HttpResponse("Playto Backend is running")

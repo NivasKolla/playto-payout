@@ -19,7 +19,7 @@ class BankAccountAdmin(admin.ModelAdmin):
 
 @admin.register(LedgerEntry)
 class LedgerEntryAdmin(admin.ModelAdmin):
-    list_display = ["id", "merchant", "entry_type", "amount_paise", "description", "created_at"]
+    list_display = ["id", "merchant", "entry_type", "amount_paise", "created_at"]
     list_filter = ["entry_type", "merchant"]
 
 
